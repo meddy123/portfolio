@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% block content_header %}
+    <h2>Topic Modelling</h2>
+    <p>
+      <a href="{% url 'upload_book' %}" class="btn btn-primary">Upload File</a>
+    </p>
+  {% endblock %}
+
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Download</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+        <tr>
+          <td>{{ book.pdf.url }}</td>
+          <td>
+            <a href="{{ book.pdf.url }}" class="btn btn-primary btn-sm" target="_blank">
+              Download
+            </a>
+          </td>
+          <td>
+            <form method="post" action="{% url 'delete_book' book.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+    {% block content_footer %}
+		<p align="right">
+            <form method="post" action="books/lda/">
+              {% csrf_token %}
+			  Number of Topics
+              <input type="number" placeholder="#" name="ntopics" min= 1 max=99>
+			  <input type="submit" value="Perform LDA" class="btn btn-success btn-sm">
+            </form>	
+		</p>
+	{% endblock %}
+{% endblock %}
+              
